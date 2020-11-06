@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:co_trade/trader.dart';
+import 'package:co_trade/models/trader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'constants.dart';
+import '../services/constants.dart';
 
 class LoadingPage extends StatefulWidget {
   @override
