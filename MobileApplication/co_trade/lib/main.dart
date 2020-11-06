@@ -1,3 +1,4 @@
+import 'package:co_trade/loading_page.dart';
 import 'package:co_trade/trader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'NunitoSans',
         ),
       ),
-      home: Scaffold(),
+      home: LoadingPage(),
     );
   }
 }
