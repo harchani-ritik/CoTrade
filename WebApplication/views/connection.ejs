@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>signin</title>
+</head>
+<body>
+	<header>
+		<span>logo</span>
+		<span><a href="">Home</a></span>
+		<span>Feed</span>
+		<span class="active">connections</span>
+		<span>Profile</span>
+	</header>
+
+	<div>
+		<input type="search" name="search">
+		<div>
+			<div>Requests</div>
+			<% req.forEach( function(entry){ %>
+				<div>
+					<form method="POST" action="/respond">
+						<input type="text" name="from" value= "<%= entry.from %>">
+						<span><%= entry.from %></span>
+						<span><button name="respond" value="1">Accept</button></span>
+						<span><button name="respond" value="0">Reject</button></span>
+					</form>
+				</div>
+
+			<% }) %>
+		</div>
+
+		<div>
+			<div>Suggested connection</div>
+
+		</div>
+	</div>
+	
+</body>
+</html>

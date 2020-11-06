@@ -26,6 +26,7 @@ console.log("Server running");
 
 
 var loged;
+var loged_id;
 
 //signup get and post
 app.get('/signup', (req, res) =>{
@@ -64,17 +65,30 @@ app.post('/submit_login', async (req, res) =>{
 	const usersCollection = database.collection('user_data');
 	const snapshot = await usersCollection.where('email', '==', req.body.username).get();
 	var msg;
+
 	if (snapshot.empty) {
   		console.log('No matching documents.');
   		res.redirect('login');
-	}  
-	snapshot.forEach(doc => {
+	}
+	snapshot.forEach(async doc => {
 		loged = doc.data();
-		console.log(loged);
+		loged_id = doc.id;
+		var stock_list = [];
+		const snapshot1 = await usersCollection.doc(doc.id).collection("stock").get()
+		.then(querysnapshot => {
+			querysnapshot.forEach(doc => {
+        		// console.log(doc.id, " => ", doc.data());
+        		stock_list.push(doc.data());
+        		console.log(stock_list[0]);
+    		});
+		})
+
+
+		console.log(doc.data());
 	  	// console.log(doc.id, '=>', doc.data());
 	  	if(req.body.password == doc.data().password){
 	  		console.log("successfully logged in")
-	  		res.render('profile', {user: loged});
+	  		res.render('profile', {user: loged, stock: stock_list});
 	  	}
 	  	else{
 	  		console.log('Wrong Password.');
@@ -83,6 +97,66 @@ app.post('/submit_login', async (req, res) =>{
 	});
 })
 
+
+app.get('/connection', async (req, res) =>{
+	var connections = [];
+	var requests = [];
+	const database = firebase.firestore();
+	const usersCollection = database.collection('user_data');
+	console.log(loged_id);
+	const snapshot1 = await usersCollection.doc(loged_id).collection("Requests").get()
+	.then(querysnapshot => {
+		querysnapshot.forEach(doc => {
+    		// console.log(doc.id, " => ", doc.data());
+    		requests.push(doc.data());
+    		console.log(requests);
+		});
+	})
+
+	res.render('connection', {req: requests});
+})
+
+app.post('/respond', async (req, res) => {
+	const database = firebase.firestore();
+	const usersCollection = database.collection('user_data');
+	const to_user = await usersCollection.doc(loged_id).collection("connections")
+	// console.log(to_user)
+	const from_user1 = await usersCollection.where('username', '==', req.body.from).get();
+
+	var response = req.body.respond
+	if(response == 1){
+		const ID= to_user.doc();
+		ID.set({
+			with: req.body.from,
+			timestamp: "7 nov"
+		}).then( ()=>{
+		    console.log('Accepted !')
+		}).catch(error => {
+		    console.error(error)
+		});
+		console.log(loged.username)
+		from_user1.forEach(async doc => {
+			console.log(doc.id);
+			const from_user = await usersCollection.doc(doc.id).collection("connections")
+			// console.log(from_user);
+			const ID1= from_user.doc();
+			ID1.set({
+				with: loged.username,
+				timestamp: "7 nov"
+			}).then( ()=>{
+			    console.log('added to both !')
+			}).catch(error => {
+			    console.error(error)
+			});
+		})
+		
+	}
+	else{
+		
+	}
+	// console.log(from + " " + response);
+	res.redirect('signup');
+})
 
 
 app.use( express.static( "views" ));
