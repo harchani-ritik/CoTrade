@@ -1,0 +1,27 @@
+{
+  "name": "stock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ujjwal-batra/Stock.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ujjwal-batra/Stock/issues"
+  },
+  "homepage": "https://github.com/ujjwal-batra/Stock#readme",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "firebase": "^8.0.0",
+    "nodemon": "^2.0.6",
+    "pug": "^3.0.0"
+  }
+}
