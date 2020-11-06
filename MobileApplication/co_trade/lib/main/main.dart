@@ -1,9 +1,9 @@
-import 'package:co_trade/loading_page.dart';
-import 'package:co_trade/trader.dart';
+import 'package:co_trade/main/loading_page.dart';
+import 'package:co_trade/models/trader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'constants.dart';
+import '../services/constants.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

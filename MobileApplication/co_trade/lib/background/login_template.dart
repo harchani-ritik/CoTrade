@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import '../services/constants.dart';
 
 class LoginTemplate extends CustomPainter{
 
