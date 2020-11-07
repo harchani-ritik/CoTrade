@@ -7,6 +7,7 @@ import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:co_trade/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,23 +18,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String docId;
   bool isLoading = false;
   final GlobalKey _scaffoldKey = new GlobalKey();
-  List<Trader> recommendedTraders = [];
-
-  _fetchTraderRecommendation() async {
-    final db = FirebaseFirestore.instance;
-    await db.collection('user_data').get().then((value) => {
-          value.docs.forEach((element) {
-            //TODO: SOME CONDITION HERE
-            print(element.id);
-            var data = element.data();
-            recommendedTraders.add(
-                Trader(uid: element.id,fullName: data['name'], username: data['username']));
-          })
-        });
-    print(recommendedTraders.length);
-  }
+  List<Trader> connectionRequest = [];
+  List<Trader> suggestions = [];
+  List<Trader> yourConnections = [];
 
   _signOut() async {
     setState(() => isLoading = true);
@@ -46,10 +36,78 @@ class _HomePageState extends State<HomePage> {
         context, MaterialPageRoute(builder: (context) => SignUpPage()));
   }
 
+  _fetchConnectionRequests(String docId) async {
+    final db = FirebaseFirestore.instance;
+    await for(var snapshots in db.collection('user_data').doc(docId).collection('Requests').snapshots()){
+      List<Trader> traders = [];
+      for (var snapshot in snapshots.docs){
+        traders.add(
+            Trader(
+              fullName: snapshot.data()['name'],
+              username: snapshot.data()['username'],
+            )
+        );
+      }
+      setState(()=> connectionRequest=traders);
+    }
+  }
+
+
+  _fetchYourConnections(String docId) async {
+    final db = FirebaseFirestore.instance;
+    await for(var snapshots in db.collection('user_data').doc(docId).collection('connections').snapshots()){
+      List<Trader> traders = [];
+      for (var snapshot in snapshots.docs){
+        traders.add(
+          Trader(
+            fullName: snapshot.data()['name'],
+            username: snapshot.data()['username'],
+          )
+        );
+      }
+      setState(()=> yourConnections=traders);
+    }
+  }
+
+  _fetchSuggestions() async {
+    final db = FirebaseFirestore.instance;
+    await db.collection('user_data').get().then((value) => {
+          value.docs.forEach((element) {
+            //TODO: SOME CONDITION HERE
+            var data = element.data();
+            suggestions.add(
+                Trader(fullName: data['name'], username: data['username']));
+          })
+        });
+    print(suggestions.length);
+  }
+
+  _fetchData() async{
+    docId= await ProfilePage.getDocId(Provider.of<Trader>(context,listen: false).username);
+    _fetchSuggestions();
+    _fetchYourConnections(docId);
+    _fetchConnectionRequests(docId);
+  }
+
+  _acceptRequest(String username,String name)async{
+    final db = FirebaseFirestore.instance;
+    await db.collection('user_data').doc(docId).collection('connections').add({
+      'name': name,
+      'username':username,
+    });
+    await _rejectRequest(username);
+  }
+
+  _rejectRequest(String username) async{
+    final db = FirebaseFirestore.instance;
+    QuerySnapshot ss= await db.collection('user_data').doc(docId).collection('Requests').where('username',isEqualTo: username).get();
+    await db.collection('user_data').doc(docId).collection('Requests').doc(ss.docs[0].id).delete();
+  }
+
   @override
   void initState() {
     super.initState();
-    _fetchTraderRecommendation();
+    _fetchData();
   }
 
   @override
@@ -71,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 12),
                   child: CustomSearch(
                     onChange: (value) {
-                      print(value);
+                      //TODO: Implement Searching
                     },
                   ),
                 ),
@@ -84,41 +142,51 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     )),
-                ListTile(
-                  leading: Image(
-                    height: 30,
-                    image: AssetImage('images/coins_icon.png'),
-                  ),
-                  title: Text(
-                    'Nitin Madhukar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: Text(
-                    '@nitinmadhukar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  trailing: Container(
-                    width: 50,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: (){
-                              //TODO: REJECT
-                            },
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: connectionRequest.length,
+                    itemBuilder: (context,index){
+                      return ListTile(
+                        leading: Image(
+                          height: 30,
+                          image: AssetImage('images/unknown_request.png'),
+                        ),
+                        title: Text(
+                          connectionRequest[index].fullName,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        subtitle: Text(
+                          connectionRequest[index].username,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        trailing: Container(
+                          width: 80,
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: IconButton(
+                                  icon: Icon(Icons.clear),
+                                  onPressed: (){
+                                    _rejectRequest(connectionRequest[index].username);
+                                    Fluttertoast.showToast(msg: 'Request Rejected');
+                                  }
+                                ),
+                              ),
+                              SizedBox(width: 20,),
+                              Flexible(
+                                child: IconButton(
+                                  icon: Icon(Icons.check),
+                                  onPressed: (){
+                                    _acceptRequest(connectionRequest[index].username,connectionRequest[index].fullName);
+                                    Fluttertoast.showToast(msg: 'Request Accepted');
+                                  }
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Flexible(
-                          child: IconButton(
-                            icon: Icon(Icons.check),
-                            onPressed: (){
-                              //TODO: REJECT
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
                 Divider(),
@@ -131,18 +199,25 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     )),
-                ListTile(
-                  leading: Image(
-                    height: 30,
-                    image: AssetImage('images/coins_icon.png'),
-                  ),
-                  title: Text(
-                    'Nitin Madhukar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: Text(
-                    '@nitinmadhukar',
-                    style: TextStyle(color: Colors.white),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: suggestions.length,
+                    itemBuilder: (context,index){
+                      return ListTile(
+                        leading: Image(
+                          height: 30,
+                          image: AssetImage('images/coins_icon.png'),
+                        ),
+                        title: Text(
+                          suggestions[index].fullName,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        subtitle: Text(
+                            suggestions[index].username,
+                            style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Divider(),
@@ -155,20 +230,27 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     )),
-                ListTile(
-                  leading: Image(
-                    height: 30,
-                    image: AssetImage('images/coins_icon.png'),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: yourConnections.length,
+                    itemBuilder: (context,index){
+                      return ListTile(
+                        leading: Image(
+                          height: 30,
+                          image: AssetImage('images/bald_man.png'),
+                        ),
+                        title: Text(
+                          yourConnections[index].fullName,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        subtitle: Text(
+                          yourConnections[index].username,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
                   ),
-                  title: Text(
-                    'Nitin Madhukar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  subtitle: Text(
-                    '@nitinmadhukar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                )
               ],
             ),
           ),
@@ -210,15 +292,11 @@ class _HomePageState extends State<HomePage> {
                                 height: 30,
                                 image: AssetImage('images/coins_icon.png'),
                               ),
-                              // Text(
-                              //     Provider.of<Trader>(context,listen: false).coins.toString(),
-                              //   style: TextStyle(color: kGreen),
-                              // )
                             ],
                           ),
                           IconButton(
                             iconSize: 35,
-                            icon: Icon(Icons.supervised_user_circle_rounded),
+                            icon: Icon(Icons.supervised_user_circle_rounded,),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -226,10 +304,12 @@ class _HomePageState extends State<HomePage> {
                                       builder: (context) => ProfilePage(
                                             Provider.of<Trader>(context,
                                                     listen: false)
-                                                .uid,
+                                                .username,
                                             isPersonal: true,
                                             signOutCallback: _signOut,
-                                          )));
+                                          ),
+                                  ),
+                              );
                             },
                           ),
                         ],
