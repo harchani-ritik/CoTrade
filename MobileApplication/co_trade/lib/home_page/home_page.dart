@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_trade/components/search_bar.dart';
 import 'package:co_trade/home_page/profile_page.dart';
+import 'package:co_trade/home_page/stock_details.dart';
 import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:co_trade/sign_up/sign_up_page.dart';
@@ -118,6 +119,9 @@ class _HomePageState extends State<HomePage> {
     _fetchData();
   }
 
+  int _currentIndex = 0;
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -136,6 +140,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 12),
                   child: CustomSearch(
+                    hintText: 'Search Users',
                     onChange: (value) {
                       //TODO: Implement Searching
                     },
@@ -299,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Text(
-                        'Stocks',
+                        _currentIndex==0?'Stocks':'Feeds',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
@@ -339,6 +344,23 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                Flexible(
+                  child: Container(
+                    // color: Colors.red,
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() => _currentIndex = index);
+                      },
+                      children: [
+                        StockDetailsPage(),
+                        Text('TWO',style: TextStyle(color: Colors.white),),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

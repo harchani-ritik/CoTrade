@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class CustomSearch extends StatelessWidget {
   final Function onChange;
-  CustomSearch({this.onChange});
+  final String hintText;
+  CustomSearch({this.onChange,this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class CustomSearch extends StatelessWidget {
                   color: Colors.white,
                 ),
                 decoration: InputDecoration(
-                    hintText: 'Search Users',
+                    hintText: hintText,
                     border: InputBorder.none),
                 cursorColor: Colors.white,
               )),
