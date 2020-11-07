@@ -43,7 +43,6 @@ class _ProfileSetupState extends State<ProfileSetup> {
       'password': trader.password,
       'phoneNo': trader.phoneNo,
     });
-    trader.uid = ref.id;
   }
 
   Future<bool> _checkForDuplicateUsername(String username) async{
@@ -85,7 +84,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
     await _registerUser(newTrader);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('uid', Provider.of<Trader>(context,listen: false).uid);
+    prefs.setString('username', Provider.of<Trader>(context,listen: false).username);
 
     setState(() => isLoading=false);
     Navigator.pushReplacement(

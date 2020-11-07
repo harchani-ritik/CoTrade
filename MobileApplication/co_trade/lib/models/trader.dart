@@ -4,9 +4,8 @@ import 'package:co_trade/models/stock.dart';
 class Trader{
   static const int INITIAL_COINS_VALUE = 1000;
 
-  Trader({this.uid,this.fullName,this.username});
+  Trader({this.fullName,this.username});
 
-  String uid;
   String fullName='';
   String email='';
   String phoneNo;

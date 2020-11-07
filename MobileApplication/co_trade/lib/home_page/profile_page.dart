@@ -7,10 +7,30 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '../models/trader.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String traderId;
+  final String username;
   final bool isPersonal;
   final Function signOutCallback;
-  ProfilePage(this.traderId, {this.isPersonal = false, this.signOutCallback});
+
+  static Future<String> getDocId(String username) async{
+    final db = FirebaseFirestore.instance;
+    var snapshot = await db.collection('user_data').where('username',isEqualTo: username).get();
+    return snapshot.docs[0].id;
+  }
+
+  static Future<Trader> fetchProfile(String username) async{
+    Trader trader = Trader();
+    final db = FirebaseFirestore.instance;
+    var snapshot = await db.collection('user_data').where('username',isEqualTo: username).get();
+    var data = snapshot.docs[0].data();
+    trader.username = data['username'];
+    trader.phoneNo = data['phoneNo'];
+    trader.email = data['email'];
+    trader.fullName = data['name'];
+    trader.coins = data['coins'];
+    return trader;
+  }
+
+  ProfilePage(this.username, {this.isPersonal = false, this.signOutCallback});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -35,46 +55,33 @@ class _ProfilePageState extends State<ProfilePage> {
     Stock('Reliance', '500.09', '20', '20th Oct Fri'),
   ];
 
+  _fetchStockData(String docId) async {
+    final db = FirebaseFirestore.instance;
+    await db.collection('user_data').
+    doc(docId).collection('stock').get().then((value) => {
+      value.docs.forEach((element) {
+        var data = element.data();
+        print(data);
+
+        if (widget.isPersonal || data['public']) {
+          //add that stock to list
+          trader.stocksHold.add(Stock(
+            data['stock_name'],
+            data['purchase_price'],
+            data['count'],
+            data['timestamp'],
+          ));
+        }
+      })
+    });
+  }
+
   _loadProfile() async {
     setState(() => isLoading = true);
+    trader = await ProfilePage.fetchProfile(widget.username);
 
-    final db = FirebaseFirestore.instance;
-    var snapshot = await db.collection('user_data').doc(widget.traderId).get();
-    print(snapshot.data());
-    var data = snapshot.data();
-    trader.username = data['username'];
-    trader.phoneNo = data['phoneNo'];
-    trader.email = data['email'];
-    trader.fullName = data['name'];
-    trader.coins = data['coins'];
-
-    //load stocks
-    try {
-      await db
-          .collection('user_data')
-          .doc(widget.traderId)
-          .collection('stock')
-          .get()
-          .then((value) {
-        value.docs.forEach((element) {
-          var data = element.data();
-          print(data);
-          if (widget.isPersonal || data['public']) {
-            //add that stock to list
-            trader.stocksHold.add(Stock(
-              data['stock_name'],
-              data['purchase_price'],
-              data['count'],
-              data['timestamp'],
-            ));
-          }
-        });
-      });
-      //TODO: Uncomment for real data
-      // dummyList = trader.stocksHold;
-    } catch (e) {
-      print('Error while finding stock data');
-    }
+    String docId = await ProfilePage.getDocId(widget.username);
+    _fetchStockData(docId);
 
     setState(() => isLoading = false);
   }

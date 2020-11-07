@@ -16,15 +16,14 @@ class _LoadingPageState extends State<LoadingPage> {
 
   _checkLogin() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loggedIn = prefs.containsKey('uid');
+    bool loggedIn = prefs.containsKey('username');
     if(loggedIn){
       Trader trader = Provider.of<Trader>(context,listen: false);
-      trader.uid = prefs.getString('uid');
+      var username = prefs.getString('username');
 
-      // print(trader.uid);
       var db = FirebaseFirestore.instance;
-      var snapshot = await db.collection('user_data').doc(trader.uid).get();
-      var data = snapshot.data();
+      QuerySnapshot snapshot =  await db.collection('user_data').where('username',isEqualTo: username).get();
+      var data = snapshot.docs[0].data();
       print(data);
       trader.username = data['username'];
       trader.phoneNo = data['phoneNo'];
