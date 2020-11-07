@@ -43,7 +43,6 @@ class _SignInPageState extends State<SignInPage> {
           print(result.id);
           Trader trader = Provider.of<Trader>(context,listen: false);
           var data = result.data();
-          trader.uid=result.id;
           trader.username = data['username'];
           trader.phoneNo = data['phoneNo'];
           trader.email = data['email'];
@@ -62,7 +61,7 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('uid', Provider.of<Trader>(context,listen: false).uid);
+    prefs.setString('username', Provider.of<Trader>(context,listen: false).username);
 
     Navigator.pushReplacement(
         context,
