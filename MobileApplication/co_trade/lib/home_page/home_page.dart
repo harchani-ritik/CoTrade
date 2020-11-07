@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:co_trade/background/primary_template.dart';
-import 'package:co_trade/components/custom_button.dart';
 import 'package:co_trade/components/search_bar.dart';
 import 'package:co_trade/home_page/profile_page.dart';
 import 'package:co_trade/models/trader.dart';
@@ -102,6 +100,16 @@ class _HomePageState extends State<HomePage> {
     final db = FirebaseFirestore.instance;
     QuerySnapshot ss= await db.collection('user_data').doc(docId).collection('Requests').where('username',isEqualTo: username).get();
     await db.collection('user_data').doc(docId).collection('Requests').doc(ss.docs[0].id).delete();
+  }
+
+  _sendRequest(String username) async{
+    final db = FirebaseFirestore.instance;
+    QuerySnapshot ss= await db.collection('user_data').where('username',isEqualTo: username).get();
+    String dId = ss.docs[0].id;
+    await db.collection('user_data').doc(dId).collection('Requests').add({
+      'name': Provider.of<Trader>(context,listen: false).fullName,
+      'username': Provider.of<Trader>(context,listen: false).username,
+    });
   }
 
   @override
@@ -216,6 +224,13 @@ class _HomePageState extends State<HomePage> {
                             suggestions[index].username,
                             style: TextStyle(color: Colors.white),
                         ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.connect_without_contact),
+                          onPressed: (){
+                            _sendRequest(suggestions[index].username);
+                            Fluttertoast.showToast(msg: 'Connection Request Sent');
+                          },
+                        ),
                       );
                     },
                   ),
@@ -234,18 +249,25 @@ class _HomePageState extends State<HomePage> {
                   child: ListView.builder(
                     itemCount: yourConnections.length,
                     itemBuilder: (context,index){
-                      return ListTile(
-                        leading: Image(
-                          height: 30,
-                          image: AssetImage('images/bald_man.png'),
-                        ),
-                        title: Text(
-                          yourConnections[index].fullName,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        subtitle: Text(
-                          yourConnections[index].username,
-                          style: TextStyle(color: Colors.white),
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context)=> ProfilePage(yourConnections[index].username)
+                          ));
+                        },
+                        child: ListTile(
+                          leading: Image(
+                            height: 30,
+                            image: AssetImage('images/bald_man.png'),
+                          ),
+                          title: Text(
+                            yourConnections[index].fullName,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            yourConnections[index].username,
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       );
                     },
