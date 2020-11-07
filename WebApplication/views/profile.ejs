@@ -4,6 +4,43 @@
 	<title>signin</title>
 </head>
 <body>
-	helloo <%= user.username %>
+	<header>
+		<span>logo</span>
+		<span><a href="">Home</a></span>
+		<span>Feed</span>
+		<span>connections</span>
+		<span class="active">Profile</span>
+	</header>
+
+	<div>
+		<div>Avatar</div>
+		<div><%= user.name %></div>
+		<div>@<%= user.username%></div>
+		<div><%= user.email %></div>
+	</div>
+	
+	<div>
+		<div>HISTORY</div>	
+		<div>
+			
+			<table>
+				<tr>
+					<th>Stock</th>
+					<th>Purchase price <br>(Rs.)</th>
+					<th>Shares</th>
+					<th>Time</th>
+				</tr>
+				<% stock.forEach( function(entry){ %>
+					<tr>
+						<th><%= entry.stock_name %></th>
+						<th><%= entry.purchase_price %></th>
+						<th><%= entry.count %></th>
+						<th><%= entry.timestamp %></th>
+					</tr>
+				<% }) %>
+			</table>
+
+		</div>
+	</div>
 </body>
 </html>
