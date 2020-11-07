@@ -22,8 +22,13 @@ class InitialPage extends StatelessWidget {
             width: double.infinity,
             child: Column(
               children: [
+                SizedBox(height: 50,),
+                Image(
+                  height: 45,
+                  image: AssetImage('images/name_logo.png'),
+                ),
                 SizedBox(
-                  height: 200,
+                  height: 80,
                 ),
                 Image(
                   height: 150,

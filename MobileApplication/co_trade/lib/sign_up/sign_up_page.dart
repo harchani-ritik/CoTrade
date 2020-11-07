@@ -28,6 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return PageView(
+      physics: NeverScrollableScrollPhysics(),
       onPageChanged: (index) {
         setState(() => _currentIndex = index);
       },

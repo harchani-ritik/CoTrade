@@ -106,58 +106,54 @@ class _ProfileSetupState extends State<ProfileSetup> {
         inAsyncCall: isLoading,
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
-          body: Stack(
-            children: [
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: CustomPaint(painter: PrimaryTemplate()),
-              ),
-              Container(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 200,
-                    ),
-                    CustomField(
-                      controller: _nameController,
-                      hintText: 'Full Name',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomField(
-                      controller: _emailController,
-                      hintText: 'Email',
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    CustomField(
-                      controller: _usernameController,
-                      hintText: 'Username',
-                      large: false,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    CustomField(
-                      controller: _passwordController,
-                      hintText: 'Password',
-                      large: false,
-                    ),
-                    SizedBox(
-                      height: 60,
-                    ),
-                    CustomButton(
-                      text: 'Done',
-                      onPress: _checkInputData,
-                    ),
-                  ],
+          body: Container(
+            width: double.infinity,
+            child: Column(
+              children: [
+                SizedBox(height: 50,),
+                Image(
+                  height: 45,
+                  image: AssetImage('images/name_logo.png'),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 100,
+                ),
+                CustomField(
+                  controller: _nameController,
+                  hintText: 'Full Name',
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CustomField(
+                  controller: _emailController,
+                  hintText: 'Email',
+                ),
+                SizedBox(
+                  height: 60,
+                ),
+                CustomField(
+                  controller: _usernameController,
+                  hintText: 'Username',
+                  large: false,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CustomField(
+                  controller: _passwordController,
+                  hintText: 'Password',
+                  large: false,
+                ),
+                SizedBox(
+                  height: 60,
+                ),
+                CustomButton(
+                  text: 'Done',
+                  onPress: _checkInputData,
+                ),
+              ],
+            ),
           ),
         ),
       ),

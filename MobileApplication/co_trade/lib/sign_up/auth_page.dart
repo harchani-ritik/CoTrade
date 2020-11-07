@@ -55,8 +55,13 @@ class _AuthPageState extends State<AuthPage> {
               width: double.infinity,
               child: Column(
                 children: [
+                  SizedBox(height: 50,),
+                  Image(
+                    height: 45,
+                    image: AssetImage('images/name_logo.png'),
+                  ),
                   SizedBox(
-                    height: 260,
+                    height: 200,
                   ),
                   CustomField(
                     controller: _phoneNoController,

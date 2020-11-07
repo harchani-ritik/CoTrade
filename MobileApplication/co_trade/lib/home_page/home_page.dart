@@ -42,43 +42,34 @@ class _HomePageState extends State<HomePage> {
       inAsyncCall: isLoading,
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        body: Stack(
-          children: [
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              child: CustomPaint(painter: PrimaryTemplate()),
-            ),
-            Container(
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Text(
-                      'Welcome to Home Page',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                  CustomButton(text: 'Sign Out',
-                      onPress: _signOut
-                  ),
-                  // CustomButton(text: 'Load stocks',
-                  //     onPress: (){
-                  //       StocksUpdate.updateStockDatabase();
-                  //     }
-                  // )
-                  CustomButton(text: 'Profile',
-                      onPress: (){
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context)=> ProfilePage(Provider.of<Trader>(context,listen: false).uid)
-                    ));
-                      }
-                  )
-                ],
+        body: Container(
+          width: double.infinity,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Text(
+                  'Welcome to Home Page',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
-            ),
-          ],
+              CustomButton(text: 'Sign Out',
+                  onPress: _signOut
+              ),
+              // CustomButton(text: 'Load stocks',
+              //     onPress: (){
+              //       StocksUpdate.updateStockDatabase();
+              //     }
+              // )
+              CustomButton(text: 'Profile',
+                  onPress: (){
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context)=> ProfilePage(Provider.of<Trader>(context,listen: false).uid)
+                ));
+                  }
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ecelivesmatter.co_trade">
    <application
-        android:label="co_trade"
+        android:label="CoTrade"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
