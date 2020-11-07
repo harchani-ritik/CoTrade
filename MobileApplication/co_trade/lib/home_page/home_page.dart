@@ -56,11 +56,6 @@ class _HomePageState extends State<HomePage> {
               CustomButton(text: 'Sign Out',
                   onPress: _signOut
               ),
-              // CustomButton(text: 'Load stocks',
-              //     onPress: (){
-              //       StocksUpdate.updateStockDatabase();
-              //     }
-              // )
               CustomButton(text: 'Profile',
                   onPress: (){
                 Navigator.push(context, MaterialPageRoute(

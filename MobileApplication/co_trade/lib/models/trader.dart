@@ -1,4 +1,6 @@
 
+import 'package:co_trade/models/stock.dart';
+
 class Trader{
   static const int INITIAL_COINS_VALUE = 1000;
 
@@ -13,7 +15,7 @@ class Trader{
   String username;
   String password;
   int coins;
-
-  List<String> requests;
-  List<String> connections;
+  List<Stock> stocksHold=[];
+  List<String> requests=[];
+  List<String> connections=[];
 }
