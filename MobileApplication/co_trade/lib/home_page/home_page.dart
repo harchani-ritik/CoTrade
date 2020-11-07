@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:co_trade/components/search_bar.dart';
+import 'package:co_trade/components/custom_search.dart';
 import 'package:co_trade/home_page/profile_page.dart';
 import 'package:co_trade/home_page/stock_details.dart';
 import 'package:co_trade/models/trader.dart';
@@ -19,7 +19,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String docId;
   bool isLoading = false;
-  final GlobalKey _scaffoldKey = new GlobalKey();
   List<Trader> connectionRequest = [];
   List<Trader> suggestions = [];
   List<Trader> yourConnections = [];
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = true);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('uid');
+    prefs.remove('username');
 
     setState(() => isLoading = false);
     Navigator.pushReplacement(

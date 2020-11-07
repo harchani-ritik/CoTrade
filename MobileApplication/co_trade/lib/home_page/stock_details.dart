@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:co_trade/components/search_bar.dart';
+import 'package:co_trade/components/custom_search.dart';
 import 'package:co_trade/models/nse_share.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:flutter/material.dart';
