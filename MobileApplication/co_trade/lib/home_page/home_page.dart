@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
               CustomButton(text: 'Profile',
                   onPress: (){
                 Navigator.push(context, MaterialPageRoute(
-                  builder: (context)=> ProfilePage(Provider.of<Trader>(context,listen: false).uid)
+                  builder: (context)=> ProfilePage(Provider.of<Trader>(context,listen: false).uid,isPersonal: true,)
                 ));
                   }
               )

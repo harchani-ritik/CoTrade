@@ -9,10 +9,10 @@ class Trader{
   }
 
   String uid;
-  String fullName;
-  String email;
+  String fullName='';
+  String email='';
   String phoneNo;
-  String username;
+  String username='';
   String password;
   int coins;
   List<Stock> stocksHold=[];

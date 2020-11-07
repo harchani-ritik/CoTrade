@@ -40,9 +40,41 @@ class _ProfilePageState extends State<ProfilePage> {
     final db = FirebaseFirestore.instance;
     var snapshot = await db.collection('user_data').doc(widget.traderId).get();
     print(snapshot.data());
+    var data = snapshot.data();
+    trader.username = data['username'];
+    trader.phoneNo = data['phoneNo'];
+    trader.email = data['email'];
+    trader.fullName = data['name'];
+    trader.coins = data['coins'];
+    
+    //load stocks
+    try {
+      await db.collection('user_data').doc(widget.traderId)
+          .collection('stock')
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          var data = element.data();
+          print(data);
+          if (widget.isPersonal || data['public']) {
+            //add that stock to list
+            trader.stocksHold.add(Stock(
+              data['stock_name'],
+              data['purchase_price'],
+              data['count'],
+              data['timestamp'],
+            ));
+          }
+        });
+      });
+      //TODO: Uncomment for real data
+      // dummyList = trader.stocksHold;
+    }
+    catch(e){
+      print('Error while finding stock data');
+    }
 
     setState(() => isLoading = false);
-
   }
 
   @override
@@ -72,10 +104,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 image: AssetImage('images/trader_avatar.png'),
               ),
               SizedBox(height: 10,),
-              Text('Nitin Madhukar',style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
-              Text('@nitinmadhukar',style: TextStyle(fontSize: 18,color: Colors.white),),
-              Text('nitinmadhukar@gmail.com',style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
+              Text(trader.fullName,style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
+              Text(trader.username,style: TextStyle(fontSize: 18,color: Colors.white),),
+              Text(trader.email,style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
+              widget.isPersonal?
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -86,9 +119,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       image: AssetImage('images/coins_icon.png'),
                     ),
                   ),
-                  Text('978',style: TextStyle(fontSize: 22,color: Colors.white,fontWeight: FontWeight.bold),),
+                  Text(trader.coins.toString(),style: TextStyle(fontSize: 22,color: Colors.white,fontWeight: FontWeight.bold),),
                 ],
-              ),
+              ):
+              Container(),
               Text('History',style: TextStyle(fontSize: 16,color: Colors.white),),
 
               Container(
@@ -99,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text('Stock',style: TextStyle(color: Colors.white),),
-                    Text('Purchase Price\n(Rs.)',style: TextStyle(color: Colors.white),),
+                    Text('Purchase\nPrice(Rs.)',style: TextStyle(color: Colors.white),),
                     Text('Shares',style: TextStyle(color: Colors.white),),
                     Text('Time',style: TextStyle(color: Colors.white),),
                   ],
@@ -109,14 +143,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: ListView.builder(
                   itemCount: dummyList.length,
                   itemBuilder: (context,index){
-                    print(index);
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(dummyList[index].id,style: TextStyle(color: Colors.white),),
-                        Text(dummyList[index].purchasedPrice,style: TextStyle(color: Colors.white),),
-                        Text(dummyList[index].sharesBought,style: TextStyle(color: Colors.white),),
-                        Text(dummyList[index].time,style: TextStyle(color: Colors.white),),
+                        Text(dummyList[index].id??'',style: TextStyle(color: Colors.white),),
+                        Text(dummyList[index].purchasedPrice??'',style: TextStyle(color: Colors.white),),
+                        Text(dummyList[index].sharesBought??'',style: TextStyle(color: Colors.white),),
+                        Text(dummyList[index].time??'',style: TextStyle(color: Colors.white),),
                       ],
                     );
                   },
