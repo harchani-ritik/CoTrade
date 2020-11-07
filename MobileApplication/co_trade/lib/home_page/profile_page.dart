@@ -140,18 +140,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 10,
               ),
               Text(
-                trader.fullName,
+                trader.fullName??'',
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                trader.username,
+                trader.username??'',
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
               Text(
-                trader.email,
+                trader.email??'',
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -172,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          trader.coins.toString(),
+                          trader.coins.toString()??'',
                           style: TextStyle(
                               fontSize: 22,
                               color: Colors.white,

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_trade/background/primary_template.dart';
 import 'package:co_trade/components/custom_button.dart';
+import 'package:co_trade/components/search_bar.dart';
 import 'package:co_trade/home_page/profile_page.dart';
 import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
@@ -17,6 +19,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   final GlobalKey _scaffoldKey = new GlobalKey();
+  List<Trader> recommendedTraders = [];
+
+  _fetchTraderRecommendation() async {
+    final db = FirebaseFirestore.instance;
+    await db.collection('user_data').get().then((value) => {
+          value.docs.forEach((element) {
+            //TODO: SOME CONDITION HERE
+            print(element.id);
+            var data = element.data();
+            recommendedTraders.add(
+                Trader(uid: element.id,fullName: data['name'], username: data['username']));
+          })
+        });
+    print(recommendedTraders.length);
+  }
 
   _signOut() async {
     setState(() => isLoading = true);
@@ -27,6 +44,12 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = false);
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SignUpPage()));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTraderRecommendation();
   }
 
   @override
@@ -45,37 +68,107 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
-                      color: kDarkBlue,
-                    ),
-                    height: 40,
-                    width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 12),
+                  child: CustomSearch(
+                    onChange: (value) {
+                      print(value);
+                    },
+                  ),
+                ),
+                Align(
+                    alignment: Alignment(-0.7, 0),
+                    child: Text(
+                      'Connection Requests',
+                      style: TextStyle(
+                          color: kGreen,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    )),
+                ListTile(
+                  leading: Image(
+                    height: 30,
+                    image: AssetImage('images/coins_icon.png'),
+                  ),
+                  title: Text(
+                    'Nitin Madhukar',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    '@nitinmadhukar',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: Container(
+                    width: 50,
                     child: Row(
                       children: [
-                        Expanded(
-                            child: TextFormField(
-                          style: TextStyle(
-                            color: Colors.white,
+                        Flexible(
+                          child: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: (){
+                              //TODO: REJECT
+                            },
                           ),
-                          decoration: InputDecoration(
-                              hintText: 'Search Users',
-                              border: InputBorder.none),
-                          cursorColor: Colors.white,
-                        )),
-                        Icon(
-                          Icons.search,
-                          size: 30,
-                          color: kBrightBlue,
+                        ),
+                        Flexible(
+                          child: IconButton(
+                            icon: Icon(Icons.check),
+                            onPressed: (){
+                              //TODO: REJECT
+                            },
+                          ),
                         ),
                       ],
                     ),
                   ),
-                )
+                ),
+                Divider(),
+                Align(
+                    alignment: Alignment(-0.7, 0),
+                    child: Text(
+                      'Suggestions',
+                      style: TextStyle(
+                          color: kGreen,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    )),
+                ListTile(
+                  leading: Image(
+                    height: 30,
+                    image: AssetImage('images/coins_icon.png'),
+                  ),
+                  title: Text(
+                    'Nitin Madhukar',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    '@nitinmadhukar',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                Divider(),
+                Align(
+                    alignment: Alignment(-0.7, 0),
+                    child: Text(
+                      'Your Connections',
+                      style: TextStyle(
+                          color: kGreen,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    )),
+                ListTile(
+                  leading: Image(
+                    height: 30,
+                    image: AssetImage('images/coins_icon.png'),
+                  ),
+                  title: Text(
+                    'Nitin Madhukar',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    '@nitinmadhukar',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ],
             ),
           ),
@@ -87,12 +180,13 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap:(){
+                        onTap: () {
                           Scaffold.of(context).openDrawer();
                         },
                         child: Image(
@@ -122,20 +216,20 @@ class _HomePageState extends State<HomePage> {
                               // )
                             ],
                           ),
-
                           IconButton(
                             iconSize: 35,
                             icon: Icon(Icons.supervised_user_circle_rounded),
-                            onPressed: (){
+                            onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ProfilePage(
-                                        Provider.of<Trader>(context, listen: false)
-                                            .uid,
-                                        isPersonal: true,
-                                        signOutCallback: _signOut,
-                                      )));
+                                            Provider.of<Trader>(context,
+                                                    listen: false)
+                                                .uid,
+                                            isPersonal: true,
+                                            signOutCallback: _signOut,
+                                          )));
                             },
                           ),
                         ],

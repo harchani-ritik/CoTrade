@@ -28,11 +28,11 @@ class InitialPage extends StatelessWidget {
                   image: AssetImage('images/name_logo.png'),
                 ),
                 SizedBox(
-                  height: 80,
+                  height: 90,
                 ),
                 Image(
                   height: 150,
-                  image: AssetImage('images/login_page_logo.png'),
+                  image: AssetImage('images/bar_image.png'),
                 ),
                 SizedBox(
                   height: 150,
