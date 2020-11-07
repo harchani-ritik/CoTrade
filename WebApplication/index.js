@@ -25,8 +25,13 @@ console.log("Server running");
 
 
 
-var loged;
-var loged_id;
+var loged = null;
+var loged_id = null;
+
+app.get('/', (req, res) =>{
+	res.render('landing');
+})
+
 
 //signup get and post
 app.get('/signup', (req, res) =>{
@@ -192,6 +197,45 @@ app.post('/stock_card', async (req, res) =>{
 	});;
 })
 
+
+app.post('/buy', async (req, res) => {
+	const database = firebase.firestore();
+	console.log(loged_id)
+	const usersCollection = await database.collection('user_data').doc(loged_id).collection("stock");
+
+	const snapshot = await usersCollection.where('stock_name', '==', req.body.buy).get();
+
+	const ID= usersCollection.doc();
+	ID.set({
+		count: 10,
+		purchase_price: req.body.price,
+		stock_name: req.body.buy,
+		timestamp: String(Date.now()),
+		public: req.body.public
+	}).then( ()=>{
+	    console.log('Data has been saved successfully !')
+	}).catch(error => {
+	    console.error(error)
+	});
+	res.redirect('home');
+})
+
+
+app.post('/sell', async (req, res) => {
+	const database = firebase.firestore();
+	console.log(loged_id)
+	const usersCollection = await database.collection('user_data').doc(loged_id).collection("stock");
+	const snapshot = await usersCollection.where('stock_name', '==', req.body.sell).where('purchase_price', '==', req.body.price).get()
+	.then(querySnapshot => {
+      	querySnapshot.forEach(doc  => {
+      		console.log(doc.id);
+      		var result = usersCollection.doc(doc.id).delete();
+      	});
+    }).catch(error => {
+	    console.error(error)
+	});;
+    res.redirect('profile');
+})
 
 app.use( express.static( "views" ));
 
