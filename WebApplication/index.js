@@ -158,6 +158,40 @@ app.post('/respond', async (req, res) => {
 	res.redirect('signup');
 })
 
+app.get('/Home', async (req, res) =>{
+	var stocks_name = [];
+	var stock_detail = []
+	var stocks_map = new Map()
+	const database = firebase.firestore();
+	const usersCollection = await database.collection('stock_data').get()
+	.then(querySnapshot => {
+      	querySnapshot.forEach(doc  => {
+        	// console.log(doc.data());
+        	stocks_name.push(doc.id);
+        	stock_detail.push(doc.data());
+        	// console.log(stocks_name);
+      	});
+    });
+    for(var i=0; i<stocks_name.length; i++)
+    	stocks_map.set(stocks_name[i], stock_detail[i]);
+	console.log(stocks_name.length);
+	res.render('home', {maping: stocks_map});
+})
+
+
+app.post('/stock_card', async (req, res) =>{
+	const database = firebase.firestore();
+	const usersCollection = await database.collection('stock_data').get()
+	.then(querySnapshot => {
+      	querySnapshot.forEach(doc  => {
+      		if(doc.id == req.body.key)
+    		res.render('stock_card', {name: doc.id, data: doc.data()});
+      	});
+    }).catch(error => {
+	    console.error(error)
+	});;
+})
+
 
 app.use( express.static( "views" ));
 
