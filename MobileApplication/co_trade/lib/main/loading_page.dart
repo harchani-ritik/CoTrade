@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:co_trade/home_page/home_page.dart';
 import 'package:co_trade/models/trader.dart';
+import 'package:co_trade/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,14 +33,14 @@ class _LoadingPageState extends State<LoadingPage> {
       trader.coins = data['coins'];
       trader.password = data['password'];
 
-      // Navigator.pushReplacement(context, MaterialPageRoute(
-      //     builder: (context)=>HomePage()
-      // ));
+      Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context)=>HomePage()
+      ));
     }
     else{
-      // Navigator.pushReplacement(context, MaterialPageRoute(
-      //   builder: (context)=>SignUpPage()
-      // ));
+      Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context)=>SignUpPage()
+      ));
     }
   }
   
