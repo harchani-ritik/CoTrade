@@ -10,60 +10,141 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
+  final GlobalKey _scaffoldKey = new GlobalKey();
 
-  _signOut() async{
-    setState(() => isLoading=true);
+  _signOut() async {
+    setState(() => isLoading = true);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('uid');
 
-    setState(() => isLoading=false);
+    setState(() => isLoading = false);
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context)=> SignUpPage()
-        ));
+        context, MaterialPageRoute(builder: (context) => SignUpPage()));
   }
 
   @override
   Widget build(BuildContext context) {
-    // Fluttertoast.showToast(msg: Provider.of<Trader>(context,listen:false).uid);
     return ModalProgressHUD(
       progressIndicator: CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(kBrightBlue),
       ),
       inAsyncCall: isLoading,
       child: Scaffold(
+        drawer: Drawer(
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: kSlightDarkBlue,
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                      color: kDarkBlue,
+                    ),
+                    height: 40,
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: TextFormField(
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                          decoration: InputDecoration(
+                              hintText: 'Search Users',
+                              border: InputBorder.none),
+                          cursorColor: Colors.white,
+                        )),
+                        Icon(
+                          Icons.search,
+                          size: 30,
+                          color: kBrightBlue,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
         resizeToAvoidBottomPadding: false,
-        body: Container(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Text(
-                  'Welcome to Home Page',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+        body: Builder(
+          builder: (context) => Container(
+            width: double.infinity,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32,horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap:(){
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: Image(
+                          height: 40,
+                          image: AssetImage('images/dots.png'),
+                        ),
+                      ),
+                      Text(
+                        'Stocks',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Image(
+                                height: 30,
+                                image: AssetImage('images/coins_icon.png'),
+                              ),
+                              // Text(
+                              //     Provider.of<Trader>(context,listen: false).coins.toString(),
+                              //   style: TextStyle(color: kGreen),
+                              // )
+                            ],
+                          ),
+
+                          IconButton(
+                            iconSize: 35,
+                            icon: Icon(Icons.supervised_user_circle_rounded),
+                            onPressed: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage(
+                                        Provider.of<Trader>(context, listen: false)
+                                            .uid,
+                                        isPersonal: true,
+                                        signOutCallback: _signOut,
+                                      )));
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              CustomButton(text: 'Sign Out',
-                  onPress: _signOut
-              ),
-              CustomButton(text: 'Profile',
-                  onPress: (){
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context)=> ProfilePage(Provider.of<Trader>(context,listen: false).uid,isPersonal: true,)
-                ));
-                  }
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
