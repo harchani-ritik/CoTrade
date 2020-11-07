@@ -53,10 +53,14 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: 200,
-        width: 200,
-        color: kBrightBlue,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image(
+            height: 60,
+            image: AssetImage('images/name_logo.png'),
+          ),
+        ),
       ),
     );
   }

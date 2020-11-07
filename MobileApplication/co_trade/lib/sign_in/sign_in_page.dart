@@ -93,8 +93,13 @@ class _SignInPageState extends State<SignInPage> {
                 width: double.infinity,
                 child: Column(
                   children: [
+                    SizedBox(height: 50,),
+                    Image(
+                      height: 45,
+                      image: AssetImage('images/name_logo.png'),
+                    ),
                     SizedBox(
-                      height: 260,
+                      height: 160,
                     ),
                     CustomField(
                       controller: _usernameController,
