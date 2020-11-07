@@ -23,12 +23,14 @@
 					<th>Time</th>
 				</tr>
 				<% maping.forEach(function(value, key) { %>		
-						<tr>
-							<th><%= key %></th>
-							<th><%= value.current_price %></th>
-							<th><%= value.open_price %></th>
-							<th><%= (value.current_price - value.open_price) / value.open_price %></th>
-						</tr>
+						<form method="POST" action="/stock_card">
+							<tr>
+								<th><button name="key" value="<%= key %>"><%= key %></button></th>
+								<th><%= value.current_price %></th>
+								<th><%= value.open_price %></th>
+								<th><%= (value.current_price - value.open_price) / value.open_price %></th>
+							</tr>
+						</form>
 				<% }) %>
 			</table>
 		</div>

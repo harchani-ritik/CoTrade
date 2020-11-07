@@ -179,6 +179,20 @@ app.get('/Home', async (req, res) =>{
 })
 
 
+app.post('/stock_card', async (req, res) =>{
+	const database = firebase.firestore();
+	const usersCollection = await database.collection('stock_data').get()
+	.then(querySnapshot => {
+      	querySnapshot.forEach(doc  => {
+      		if(doc.id == req.body.key)
+    		res.render('stock_card', {name: doc.id, data: doc.data()});
+      	});
+    }).catch(error => {
+	    console.error(error)
+	});;
+})
+
+
 app.use( express.static( "views" ));
 
 app.listen(8000);
