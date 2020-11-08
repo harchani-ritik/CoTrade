@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'feed_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -372,7 +373,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       children: [
                         StockDetailsPage(),
-                        Text('TWO',style: TextStyle(color: Colors.white),),
+                        FeedPage(),
                       ],
                     ),
                   ),

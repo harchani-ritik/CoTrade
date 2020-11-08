@@ -7,7 +7,6 @@ import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
 class StockDetailsPage extends StatefulWidget {
@@ -60,7 +59,7 @@ class _StockDetailsPageState extends State<StockDetailsPage> {
     }
     final db = FirebaseFirestore.instance;
     String docId = await ProfilePage.getDocId(Provider.of<Trader>(context,listen: false).username);
-    await db.collection('user_data').doc(docId).collection('stocks').add({
+    await db.collection('user_data').doc(docId).collection('stock').add({
       'count':10,
       'public':true,
       'purchase_price': share.currentPrice,

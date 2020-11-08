@@ -65,12 +65,11 @@ class _ProfilePageState extends State<ProfilePage> {
   _fetchStockData(String docId) async {
     final db = FirebaseFirestore.instance;
     await db.collection('user_data').
-    doc(docId).collection('stocks').get().then((value) => {
+    doc(docId).collection('stock').get().then((value) => {
       value.docs.forEach((element) {
         var data = element.data();
         print(data);
-
-        if (widget.isPersonal || data['public']) {
+        if(data['count']>0){
           //add that stock to list
           trader.stocksHold.add(Stock(
             data['stock_name'],
