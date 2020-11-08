@@ -4,6 +4,7 @@ import 'package:co_trade/home_page/profile_page.dart';
 import 'package:co_trade/home_page/stock_details.dart';
 import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
+import 'package:co_trade/services/notifications.dart';
 import 'package:co_trade/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,12 +40,18 @@ class _HomePageState extends State<HomePage> {
     await for(var snapshots in db.collection('user_data').doc(docId).collection('Requests').snapshots()){
       List<Trader> traders = [];
       for (var snapshot in snapshots.docs){
-        traders.add(
-            Trader(
-              fullName: snapshot.data()['name'],
-              username: snapshot.data()['username'],
-            )
-        );
+        if(snapshot.data()['username']!=''){
+          Notifications().generate(
+              'New Connection Request',
+              'You have received connection request from ${snapshot.data()['name']}'
+          );
+          traders.add(
+              Trader(
+                fullName: snapshot.data()['name'],
+                username: snapshot.data()['username'],
+              )
+          );
+        }
       }
       setState(()=> connectionRequest=traders);
     }
@@ -56,12 +63,14 @@ class _HomePageState extends State<HomePage> {
     await for(var snapshots in db.collection('user_data').doc(docId).collection('connections').snapshots()){
       List<Trader> traders = [];
       for (var snapshot in snapshots.docs){
-        traders.add(
-          Trader(
-            fullName: snapshot.data()['name'],
-            username: snapshot.data()['username'],
-          )
-        );
+        if(snapshot.data()['username']!=''){
+          traders.add(
+              Trader(
+                fullName: snapshot.data()['name'],
+                username: snapshot.data()['username'],
+              )
+          );
+        }
       }
       setState(()=> yourConnections=traders);
     }
@@ -73,8 +82,10 @@ class _HomePageState extends State<HomePage> {
           value.docs.forEach((element) {
             //TODO: SOME CONDITION HERE
             var data = element.data();
-            suggestions.add(
-                Trader(fullName: data['name'], username: data['username']));
+            if(data['username']!=Provider.of<Trader>(context,listen: false).username){
+              suggestions.add(
+                  Trader(fullName: data['name'], username: data['username']));
+            }
           })
         });
     print(suggestions.length);

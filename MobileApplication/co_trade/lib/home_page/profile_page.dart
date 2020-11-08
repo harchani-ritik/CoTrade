@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_trade/models/stock.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../models/trader.dart';
@@ -19,14 +20,20 @@ class ProfilePage extends StatefulWidget {
 
   static Future<Trader> fetchProfile(String username) async{
     Trader trader = Trader();
-    final db = FirebaseFirestore.instance;
-    var snapshot = await db.collection('user_data').where('username',isEqualTo: username).get();
-    var data = snapshot.docs[0].data();
-    trader.username = data['username'];
-    trader.phoneNo = data['phoneNo'];
-    trader.email = data['email'];
-    trader.fullName = data['name'];
-    trader.coins = data['coins'];
+    try {
+      final db = FirebaseFirestore.instance;
+      var snapshot = await db.collection('user_data').where(
+          'username', isEqualTo: username).get();
+      var data = snapshot.docs[0].data();
+      trader.username = data['username'];
+      trader.phoneNo = data['phoneNo'];
+      trader.email = data['email'];
+      trader.fullName = data['name'];
+      trader.coins = data['coins'];
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: 'Invalid Profile');
+    }
     return trader;
   }
 
@@ -68,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
           trader.stocksHold.add(Stock(
             data['stock_name'],
             data['purchase_price'],
-            data['count'],
+            data['count'].toString(),
             data['timestamp'],
           ));
         }
@@ -81,7 +88,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _loadProfile() async {
     setState(() => isLoading = true);
-    trader = await ProfilePage.fetchProfile(widget.username);
+    try {
+      trader = await ProfilePage.fetchProfile(widget.username);
+    }
+    catch(e){
+    }
 
     String docId = await ProfilePage.getDocId(widget.username);
     _fetchStockData(docId);
