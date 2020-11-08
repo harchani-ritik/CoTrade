@@ -220,6 +220,16 @@ tr{
   border-left: 1px solid white;
   height: 500px;
 }
+.sellit{
+  background: none;
+  border: none;
+  color: white;
+  width: 100px
+}
+.sell_price{
+  width: 0;
+  height: 0;
+}
 
 </style>
 <body>
@@ -247,16 +257,13 @@ tr{
 
 <div class="wrapper">
     <div class="left">
-        <img src="https://i.imgur.com/cMy8V5j.png" alt="user">
-	<!-- </div> -->
-	<!-- <div>Avatar</div> -->
-	<div><%= user.name %></div>
-	<div>@<%= user.username%></div>
-	<br>
-	<br>
-	<div><%= user.email %></div>
-<!-- </div> -->
-	</div>
+        <img src="https://png.pngtree.com/png-vector/20190321/ourmid/pngtree-vector-users-icon-png-image_856952.jpg" alt="user">
+      	<div><%= user.name %></div>
+      	<div>@<%= user.username%></div>
+      	<br>
+      	<br>
+      	<div><%= user.email %></div>
+	 </div>
 	<div class="vertical"></div>
     <div class="right">
         <div class="info">
@@ -267,9 +274,10 @@ tr{
 					<table>
 						<tr>
 							<th>Stock</th>
-							<th>Purchase price <br>(Rs.)</th>
+							<th>Purchase price</th>
 							<th>Shares</th>
 							<th>Time</th>
+              <th>Sell</th>
 						</tr>
 						<% stock.forEach( function(entry){ %>
 							<tr>
@@ -279,8 +287,8 @@ tr{
 								<th><%= entry.timestamp %></th>
                 <th>
                   <form method="POST" action="/sell">
-                    <button name="sell" value="<%= entry.stock_name %>">Sell (10 shares)</button>
-                    <input type="text" name="price" value="<%= entry.purchase_price %>">
+                    <button class="sellit"name="sell" value="<%= entry.stock_name %>">Sell (10 shares)</button>
+                    <input class="sell_price" type="text" name="price" value="<%= entry.purchase_price %>">
                   </form>
                 </th>
 							</tr>
