@@ -281,6 +281,12 @@ a.active {
 								<th><%= entry.purchase_price %></th>
 								<th><%= entry.count %></th>
 								<th><%= entry.timestamp %></th>
+                <th>
+                  <form method="POST" action="/sell">
+                    <button name="sell" value="<%= entry.stock_name %>">Sell (10 shares)</button>
+                    <input type="text" name="price" value="<%= entry.purchase_price %>">
+                  </form>
+                </th>
 							</tr>
 						<% }) %>
 					</table>

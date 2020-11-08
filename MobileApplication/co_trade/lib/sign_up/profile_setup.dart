@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_trade/background/primary_template.dart';
 import 'package:co_trade/components/custom_button.dart';
 import 'package:co_trade/components/custom_field.dart';
+import 'package:co_trade/components/custom_password.dart';
 import 'package:co_trade/home_page/home_page.dart';
 import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
@@ -139,7 +140,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
                 SizedBox(
                   height: 20,
                 ),
-                CustomField(
+                CustomPasswordInput(
                   controller: _passwordController,
                   hintText: 'Password',
                   large: false,

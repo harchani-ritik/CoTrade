@@ -171,7 +171,19 @@ body #de{
 			<img src="Group 55.png " width="200px">
 		</div>
 	</div>
+	<div>
+		<form method="POST" action="/buy">
+			<button name="buy" value="<%= name %>">BUY</button>
+			<input type="text" name="price" value="<%= data.current_price %>">
+			<input type="radio" name="public" value="true">
+			<label for="public">Public</label><br>
+			<input type="radio"name="public" value="false">
+			<label for="Private">Private</label><br>
+		</form>
+		<div>Click to buy 10 shares of <%= name %></div>
+	</div>
 
+	<div>IMAGE figma se le lio vrna sunidhi se</div>
 
 </body>
 </html>

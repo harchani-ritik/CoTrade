@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
   _fetchStockData(String docId) async {
     final db = FirebaseFirestore.instance;
     await db.collection('user_data').
-    doc(docId).collection('stock').get().then((value) => {
+    doc(docId).collection('stocks').get().then((value) => {
       value.docs.forEach((element) {
         var data = element.data();
         print(data);
@@ -73,6 +73,9 @@ class _ProfilePageState extends State<ProfilePage> {
           ));
         }
       })
+    });
+    setState(() {
+
     });
   }
 
@@ -220,25 +223,25 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Flexible(
                 child: ListView.builder(
-                  itemCount: dummyList.length,
+                  itemCount: trader.stocksHold.length,
                   itemBuilder: (context, index) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          dummyList[index].id ?? '',
+                          trader.stocksHold[index].id ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          dummyList[index].purchasedPrice ?? '',
+                          trader.stocksHold[index].purchasedPrice ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          dummyList[index].sharesBought ?? '',
+                          trader.stocksHold[index].sharesBought ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          dummyList[index].time ?? '',
+                          trader.stocksHold[index].time ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                       ],

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:co_trade/components/search_bar.dart';
+import 'package:co_trade/components/custom_search.dart';
 import 'package:co_trade/home_page/profile_page.dart';
+import 'package:co_trade/home_page/stock_details.dart';
 import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:co_trade/sign_up/sign_up_page.dart';
@@ -18,7 +19,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String docId;
   bool isLoading = false;
-  final GlobalKey _scaffoldKey = new GlobalKey();
   List<Trader> connectionRequest = [];
   List<Trader> suggestions = [];
   List<Trader> yourConnections = [];
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = true);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('uid');
+    prefs.remove('username');
 
     setState(() => isLoading = false);
     Navigator.pushReplacement(
@@ -89,6 +89,12 @@ class _HomePageState extends State<HomePage> {
 
   _acceptRequest(String username,String name)async{
     final db = FirebaseFirestore.instance;
+    String connectionID = await ProfilePage.getDocId(username);
+    await db.collection('user_data').doc(connectionID).collection('connections').add({
+      'name': Provider.of<Trader>(context,listen: false).fullName,
+      'username':Provider.of<Trader>(context,listen: false).username,
+    });
+
     await db.collection('user_data').doc(docId).collection('connections').add({
       'name': name,
       'username':username,
@@ -118,6 +124,9 @@ class _HomePageState extends State<HomePage> {
     _fetchData();
   }
 
+  int _currentIndex = 0;
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -136,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 12),
                   child: CustomSearch(
+                    hintText: 'Search Users',
                     onChange: (value) {
                       //TODO: Implement Searching
                     },
@@ -299,7 +309,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Text(
-                        'Stocks',
+                        _currentIndex==0?'Stocks':'Feeds',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
@@ -339,6 +349,23 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                Flexible(
+                  child: Container(
+                    // color: Colors.red,
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() => _currentIndex = index);
+                      },
+                      children: [
+                        StockDetailsPage(),
+                        Text('TWO',style: TextStyle(color: Colors.white),),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_trade/background/primary_template.dart';
 import 'package:co_trade/components/custom_button.dart';
 import 'package:co_trade/components/custom_field.dart';
+import 'package:co_trade/components/custom_password.dart';
 import 'package:co_trade/models/trader.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:co_trade/sign_up/sign_up_page.dart';
@@ -107,9 +108,9 @@ class _SignInPageState extends State<SignInPage> {
                     SizedBox(
                       height: 60,
                     ),
-                    CustomField(
-                      controller: _passwordController,
+                    CustomPasswordInput(
                       hintText: 'Password',
+                      controller: _passwordController,
                     ),
                     SizedBox(
                       height: 100,

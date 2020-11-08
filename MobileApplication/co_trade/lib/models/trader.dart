@@ -2,7 +2,7 @@
 import 'package:co_trade/models/stock.dart';
 
 class Trader{
-  static const int INITIAL_COINS_VALUE = 1000;
+  static const int INITIAL_COINS_VALUE = 100000;
 
   Trader({this.fullName,this.username});
 
