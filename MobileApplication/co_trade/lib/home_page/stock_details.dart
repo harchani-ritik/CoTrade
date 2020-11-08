@@ -12,6 +12,7 @@ class StockDetailsPage extends StatefulWidget {
 
 class _StockDetailsPageState extends State<StockDetailsPage> {
   List<NSEShare> shares = [];
+  List<NSEShare> allShares = [];
   bool isLoading = false;
 
   _fetchNSEShares() async {
@@ -22,11 +23,14 @@ class _StockDetailsPageState extends State<StockDetailsPage> {
         nseShares.add(NSEShare(snapshot.id, snapshot.data()['current_price'],
             snapshot.data()['open_price']));
       }
-      setState(() => shares=nseShares);
+      allShares=nseShares;
+      shares=allShares;
+      setState(() {
+      });
     }
   }
 
-  freeStr(String s){
+  static freeStr(String s){
     String newString = '';
     for(int i=0;i<s.length;i++){
       if(s[i]!=',')
@@ -50,7 +54,18 @@ class _StockDetailsPageState extends State<StockDetailsPage> {
             padding: const EdgeInsets.all(8.0),
             child: CustomSearch(
               hintText: 'Search Stocks',
-              onChange: (value) {},
+              onChange: (value) {
+                if(value!=''){
+                  shares = shares.where((element) => element.name.toLowerCase().contains(value.toString().toLowerCase())).toList();
+                  setState(() {
+                  });
+                }
+                else{
+                  shares=allShares;
+                  setState(() {
+                  });
+                }
+              },
             ),
           ),
           Expanded(
