@@ -5,7 +5,6 @@ import 'package:co_trade/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/constants.dart';
 
 class LoadingPage extends StatefulWidget {
   @override

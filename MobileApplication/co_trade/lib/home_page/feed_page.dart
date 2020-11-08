@@ -19,11 +19,13 @@ class _FeedPageState extends State<FeedPage> {
 
 
   _fetchFeed() async{
-    isLoading = true;
 
     final db = FirebaseFirestore.instance;
     List<String> usernames=[];
-    String docId = await ProfilePage.getDocId(Provider.of<Trader>(context,listen:false).username);
+    String docId = await ProfilqqePage.getDocId(Provider.of<Trader>(context,listen:false).username);
+
+
+
     await db.collection('user_data').doc(docId).collection('connections').get().then((value) => {
       value.docs.forEach((element) async {
         usernames.add(element.data()['username']);
