@@ -89,6 +89,12 @@ class _HomePageState extends State<HomePage> {
 
   _acceptRequest(String username,String name)async{
     final db = FirebaseFirestore.instance;
+    String connectionID = await ProfilePage.getDocId(username);
+    await db.collection('user_data').doc(connectionID).collection('connections').add({
+      'name': Provider.of<Trader>(context,listen: false).fullName,
+      'username':Provider.of<Trader>(context,listen: false).username,
+    });
+
     await db.collection('user_data').doc(docId).collection('connections').add({
       'name': name,
       'username':username,
