@@ -2,14 +2,16 @@
 <html>
 <head>
 	<title>signin</title>
-	<link href='https://fonts.googleapis.com/css?family=Nunito Sans' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Nunito Sans' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/solid.min.css">
+  
 </head>
 <style>
 	body{
 
-margin:0;
+  margin:0;
 /* color:#6a6f8c; */
-background:url("./homenew.jpg") no-repeat;
+  background:url("./homenew.jpg");
   background-size:cover;
 /* background-position: center; */
 
@@ -231,16 +233,20 @@ tr{
   height: 0;
 }
 
+a.active {
+  border-bottom: 10px solid #F16158;
+  border-radius: 2px;
+}
 </style>
 <body>
 	<nav class="navbar-transparent" role="navigation">
 		<ul>
-			<span>logo</span>
+			<span><img src="Group 49.svg" width="50px" height="50px" padding-top="10px"></span>
 		  <li><a href="#1">Home</a></li>
 		  <li><a href="#2">Feed</a></li>
 		  <li><a href="#3">connections</a></li>
 		  <!-- <li><a href="#4">Fourth</a></li> -->
-		  <li><a href="#5" >Profile</a></li>
+		  <li><a href="#5" class="active">Profile</a></li>
 		</ul>
 	  </nav>
 	  

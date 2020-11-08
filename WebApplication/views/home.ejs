@@ -66,7 +66,8 @@ nav ul li a:hover {
   color: #34495E;
 }
 a.active {
-  border-bottom: 10px solid #ecf0f1;
+  border-bottom: 10px solid #F16158;
+  border-radius: 2px;
 }
 
 /* Headings */
@@ -172,17 +173,27 @@ td{
 	color:black;
 	background-color: black;
 } */
+.cname{
+  background-color: #1C2754;
+  color: white;
+  border-radius: 12px;
+  width: 100px;
+  height: 30px;
+  font-size: 12px;
+  border-width: 0.1px;
+  border-color: #17203F;
+}
 
 	</style>
 <body>
 	<nav class="navbar-transparent" role="navigation">
 		<ul>
-			<span>logo</span>
-		  <li><a href="#1">Home</a></li>
+			<span><img src="Group 49.svg" width="50px" height="50px" padding-top="10px"></span>
+		  <li><a href="#1"class="active">Home</a></li>
 		  <li><a href="#2">Feed</a></li>
 		  <li><a href="#3">connections</a></li>
 		  <!-- <li><a href="#4">Fourth</a></li> -->
-		  <li><a href="#5"class="active" >Profile</a></li>
+		  <li><a href="#5" >Profile</a></li>
 		</ul>
 	  </nav>
 	<!-- <header>
@@ -208,7 +219,11 @@ td{
 				<% maping.forEach(function(value, key) { %>		
 						<form method="POST" action="/stock_card">
 							<tr>
+<<<<<<< HEAD
 								<th><button class="details" name="key" value="<%= key %>"><%= key %></button></th>
+=======
+								<th><button name="key" class="cname" value="<%= key %>"><%= key %></button></th>
+>>>>>>> a80cd04cf554f00357e51761474bed0c727405d6
 								<th><%= value.current_price %></th>
 								<th><%= value.open_price %></th>
 								<th><%= (value.current_price - value.open_price)%></th>

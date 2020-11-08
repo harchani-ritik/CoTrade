@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_trade/models/stock.dart';
 import 'package:co_trade/services/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../models/trader.dart';
@@ -19,14 +20,20 @@ class ProfilePage extends StatefulWidget {
 
   static Future<Trader> fetchProfile(String username) async{
     Trader trader = Trader();
-    final db = FirebaseFirestore.instance;
-    var snapshot = await db.collection('user_data').where('username',isEqualTo: username).get();
-    var data = snapshot.docs[0].data();
-    trader.username = data['username'];
-    trader.phoneNo = data['phoneNo'];
-    trader.email = data['email'];
-    trader.fullName = data['name'];
-    trader.coins = data['coins'];
+    try {
+      final db = FirebaseFirestore.instance;
+      var snapshot = await db.collection('user_data').where(
+          'username', isEqualTo: username).get();
+      var data = snapshot.docs[0].data();
+      trader.username = data['username'];
+      trader.phoneNo = data['phoneNo'];
+      trader.email = data['email'];
+      trader.fullName = data['name'];
+      trader.coins = data['coins'];
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: 'Invalid Profile');
+    }
     return trader;
   }
 
@@ -62,23 +69,29 @@ class _ProfilePageState extends State<ProfilePage> {
       value.docs.forEach((element) {
         var data = element.data();
         print(data);
-
-        if (widget.isPersonal || data['public']) {
+        if(data['count']>0){
           //add that stock to list
           trader.stocksHold.add(Stock(
             data['stock_name'],
             data['purchase_price'],
-            data['count'],
+            data['count'].toString(),
             data['timestamp'],
           ));
         }
       })
     });
+    setState(() {
+
+    });
   }
 
   _loadProfile() async {
     setState(() => isLoading = true);
-    trader = await ProfilePage.fetchProfile(widget.username);
+    try {
+      trader = await ProfilePage.fetchProfile(widget.username);
+    }
+    catch(e){
+    }
 
     String docId = await ProfilePage.getDocId(widget.username);
     _fetchStockData(docId);
@@ -220,25 +233,25 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Flexible(
                 child: ListView.builder(
-                  itemCount: dummyList.length,
+                  itemCount: trader.stocksHold.length,
                   itemBuilder: (context, index) {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          dummyList[index].id ?? '',
+                          trader.stocksHold[index].id ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          dummyList[index].purchasedPrice ?? '',
+                          trader.stocksHold[index].purchasedPrice ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          dummyList[index].sharesBought ?? '',
+                          trader.stocksHold[index].sharesBought ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          dummyList[index].time ?? '',
+                          trader.stocksHold[index].time ?? '',
                           style: TextStyle(color: Colors.white),
                         ),
                       ],

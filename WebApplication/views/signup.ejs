@@ -16,7 +16,7 @@
 	
 	margin:0;
 	/* color:#6a6f8c; */
-	background:url("./homenew.jpg") no-repeat;
+	background:url("./homenew.jpg");
 	background-size:cover	;
 	background-position: center;
 
@@ -50,7 +50,7 @@ a{color:inherit;text-decoration:none}
 	width:100%;
 	height:100%;
 	position:absolute;
-	padding:90px 70px 50px 70px;
+	padding:100px 70px 50px 70px;
 	/* background:rgba(40,57,101,.9); */
 }
 .login-html .sign-in-htm,
@@ -96,7 +96,7 @@ a{color:inherit;text-decoration:none}
 	border:none;
 	padding:15px 20px;
 	border-radius:25px;
-	background:rgba(255,255,255,.1);
+	background:#17203F;
 }
 .login-form .group input[data-type="password"]{
 	text-security:circle;
@@ -108,6 +108,9 @@ a{color:inherit;text-decoration:none}
 }
 .login-form .group .button{
 	background:#1161ee;
+	width: 140px;
+	text-align: center;
+	margin-left: 120px;
 }
 .login-form .group label .icon{
 	width:15px;
@@ -164,8 +167,22 @@ a{color:inherit;text-decoration:none}
 .foot-lnk{
 	text-align:center;
 }
+.logo{
+	margin-top: 60px;
+	
+}
 
+.lo{
+	color: white;
+	font-size: 40px;
+	margin-left: 80px;
+	margin-top: -100px;
+	text-align: center;
+	font-family: sans-serif;
+}
 	</style>
+		<div class="logo"><img src="Group 49.svg" width="80px" height="80px"><span class="lo">CO-TRADE</span> </div>
+
 	<form method="POST" action="/submit_signup" >
 			<div class="login-html">
 				<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab"></label>
@@ -173,24 +190,24 @@ a{color:inherit;text-decoration:none}
 				<div class="login-form">
 					<div class="sign-in-htm">
 						<div class="group">
-							<label for="email" class="label">Email</label>
-							<input id="email" type="email" class="input" name="email">
+							<!-- <label for="email" class="label">Email</label> -->
+							<input id="email" type="email" class="input" name="email" placeholder="Email">
 						</div>
 						<div class="group">
-							<label for="password" class="label">Password</label>
-							<input id="password" type="password" class="input" data-type="password" name="password">
+							<!-- <label for="password" class="label">Password</label> -->
+							<input id="password" type="password" class="input" data-type="password" name="password" placeholder="Password">
             </div>
             <div class="group">
-							<label for="userId" class="label">Username</label>
-							<input id="userId" type="text" class="input" name="userId">
+							<!-- <label for="userId" class="label">Username</label> -->
+							<input id="userId" type="text" class="input" name="userId" placeholder="Username">
             </div>
             <div class="group">
-							<label for="phoneno" class="label">Phone Number</label>
-							<input id="phoneno" type="number" class="input" name="phoneno">
+							<!-- <label for="phoneno" class="label">Phone Number</label> -->
+							<input id="phoneno" type="number" class="input" name="phoneno" placeholder="Phone Number">
 						</div>
             <div class="group">
-							<label for="firstName" class="label">Name</label>
-							<input id="firstName" type="text" class="input" name="firstName">
+							<!-- <label for="firstName" class="label">Name</label> -->
+							<input id="firstName" type="text" class="input" name="firstName" placeholder="Name">
             </div>
            
 						<div class="group">
