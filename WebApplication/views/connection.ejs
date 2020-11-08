@@ -3,24 +3,85 @@
 <head>
 	<title>signin</title>
 </head>
-<body>
-	<header>
-		<span>logo</span>
-		<span><a href="">Home</a></span>
-		<span>Feed</span>
-		<span class="active">connections</span>
-		<span>Profile</span>
-	</header>
+<style>
+body{
+	background:url("./homenew.jpg") no-repeat;
+	 background-size:cover;
+	position: relative;
+	font-family: 'Nunito Sans';
+	font:600 16px/18px;
+	font-family: sans-serif !important;
+	align-content: center;
+}
+nav {
+  width: 100%;
+  height: 60px; 
+  position: fixed; 
+  top: 0;
+  background: transparent;
+}
 
-	<div>
-		<input type="search" name="search">
-		<div>
+nav ul {
+  padding: 20px;
+  margin: 0 auto;
+  list-style: none;
+  text-align: center;
+}
+nav ul li {
+  display: inline-block;
+  margin: 0 70px;
+  font-size: 30px;
+}
+nav ul li a {
+  padding: 10px 0;
+  color: #fff;
+  font-size: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.5s ease;
+}
+nav ul li a:hover {
+  color: #34495E;
+}
+a.active {
+  border-bottom: 10px solid #ecf0f1;
+}
+.block{
+	margin: 10%;
+	text-align: center;
+	color: white;
+}
+.request, .suggested{
+	padding: 10px;
+}
+.input1{
+	width: 0;
+	height: 0;
+}
+
+</style>
+<body>
+	<nav class="navbar-transparent" role="navigation">
+		<ul>
+			<span>logo</span>
+		  <li><a href="#1">Home</a></li>
+		  <li><a href="#2">Feed</a></li>
+		  <li><a href="#3">connections</a></li>
+		  <!-- <li><a href="#4">Fourth</a></li> -->
+		  <li><a href="#5" >Profile</a></li>
+		</ul>
+	  </nav>
+
+	<div class="block">
+		<div class="input"><input type="search" name="search"></div>
+		<div class="request">
 			<div>Requests</div>
 			<% req.forEach( function(entry){ %>
 				<div>
 					<form method="POST" action="/respond">
-						<input type="text" name="from" value= "<%= entry.from %>">
-						<span><%= entry.from %></span>
+						<input class="input1" type="text" name="from" value= "<%= entry.username %>">
+						<input type="text" class="input1" name="from_name" value= "<%= entry.name %>">
+						<span><%= entry.username %></span>
 						<span><button name="respond" value="1">Accept</button></span>
 						<span><button name="respond" value="0">Reject</button></span>
 					</form>
@@ -29,9 +90,20 @@
 			<% }) %>
 		</div>
 
-		<div>
+		<div class="suggested">
 			<div>Suggested connection</div>
+			<% suggested.forEach( function(entry){ %>
+				<div>
+					<form method="POST" action="/connect">
+						<input class="input1" type="text" name="from" value= "<%= entry.username %>">
+						<input type="text" class="input1" name="from_name" value= "<%= entry.name %>">
+						<span><%= entry.username %></span>
+						<span><button name="respond" value="1">Accept</button></span>
+						<span><button name="respond" value="0">Reject</button></span>
+					</form>
+				</div>
 
+			<% }) %>
 		</div>
 	</div>
 	

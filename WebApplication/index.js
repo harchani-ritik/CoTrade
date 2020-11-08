@@ -28,6 +28,7 @@ console.log("Server running");
 var loged = null;
 var loged_id = null;
 
+//landing page
 app.get('/', (req, res) =>{
 	res.render('landing');
 })
@@ -38,13 +39,14 @@ app.get('/signup', (req, res) =>{
 	res.render('signup')
 })
 
-app.post('/submit_signup', (req, res) =>{
+app.post('/submit_signup', async (req, res) =>{
 	const database = firebase.firestore();
 	const usersCollection = database.collection('user_data');
 
 	const ID= usersCollection.doc();
+	// console.log(ID);
 	ID.set({
-		coins:1000,
+		coins:100000,
 		name: req.body.firstName,
 		username: req.body.userId,
 		password: req.body.password,
@@ -55,17 +57,48 @@ app.post('/submit_signup', (req, res) =>{
 	}).catch(error => {
 	    console.error(error)
 	});
+	const newCollection = await ID.collection('Requests').doc();
+	// console.log(newCollection);
+	await newCollection.set({
+	  name: "",
+	  username: ''
+	});
+
+
+
+	const newCollection1 = await ID.collection('connections').doc();
+	// console.log(newCollection);
+	await newCollection1.set({
+	  name: "",
+	  username: ''
+	});
+	const newCollection2 = await ID.collection('history').doc();
+	// console.log(newCollection);
+	await newCollection2.set({
+	  bought: "",
+	  price: '',
+	  stocks_name: "",
+	  timestamp: ""
+	});
+	const newCollection3 = await ID.collection('stock').doc();
+	// console.log(newCollection);
+	await newCollection3.set({
+	  count: 0,
+	  public: '',
+	  purchase_price: "",
+	  stock_name: "",
+	  timestamp: ""
+	});
+
 	res.redirect('login');
 })
 
 
 //login get and post
 app.get('/login', (req, res) =>{
-	loged = req.session;
 	res.render('login')
 })
 app.post('/submit_login', async (req, res) =>{
-	loged = req.session;
 	const database = firebase.firestore();
 	const usersCollection = database.collection('user_data');
 	const snapshot = await usersCollection.where('email', '==', req.body.username).get();
@@ -106,6 +139,8 @@ app.post('/submit_login', async (req, res) =>{
 app.get('/connection', async (req, res) =>{
 	var connections = [];
 	var requests = [];
+	var suggested = [];
+	var suggested1 = [];
 	const database = firebase.firestore();
 	const usersCollection = database.collection('user_data');
 	console.log(loged_id);
@@ -117,8 +152,23 @@ app.get('/connection', async (req, res) =>{
     		console.log(requests);
 		});
 	})
+	const snapshot2 = await usersCollection.doc(loged_id).collection("connections").get()
+	.then(async querysnapshot => {
+		querysnapshot.forEach( async doc => {
+    		// console.log(doc.id, " => ", doc.data());
+    		const snapshot3 = await usersCollection.where('username', '==', doc.data().username).collection("connections").get()
+    		.then(querysnapshot => {
+				querysnapshot.forEach(doc => {
+		    		// console.log(doc.id, " => ", doc.data());
+		    		suggested1.push(doc.data());
+		    		// console.log(requests);
+				});
+			})
+    		// console.log(requests);
+		});
+	})
 
-	res.render('connection', {req: requests});
+	res.render('connection', {req: requests, suggested: suggested1});
 })
 
 app.post('/respond', async (req, res) => {
@@ -132,8 +182,8 @@ app.post('/respond', async (req, res) => {
 	if(response == 1){
 		const ID= to_user.doc();
 		ID.set({
-			with: req.body.from,
-			timestamp: "7 nov"
+			username: req.body.from,
+			name: req.body.from_name
 		}).then( ()=>{
 		    console.log('Accepted !')
 		}).catch(error => {
@@ -146,10 +196,19 @@ app.post('/respond', async (req, res) => {
 			// console.log(from_user);
 			const ID1= from_user.doc();
 			ID1.set({
-				with: loged.username,
-				timestamp: "7 nov"
-			}).then( ()=>{
-			    console.log('added to both !')
+				username: loged.username,
+				name: loged.name
+			}).then( async ()=>{
+			    console.log('added to both !');
+			    const request = await usersCollection.doc(loged_id).collection('Requests').where("username", '==', req.body.from).get()
+			    .then(querySnapshot => {
+			      	querySnapshot.forEach(doc  => {
+			      		console.log(doc.id);
+			      		var result = usersCollection.doc(loged_id).collection('Requests').doc(doc.id).delete();
+			      	});
+			    }).catch(error => {
+				    console.error(error)
+				});
 			}).catch(error => {
 			    console.error(error)
 			});
@@ -157,10 +216,18 @@ app.post('/respond', async (req, res) => {
 		
 	}
 	else{
-		
+		const request = await usersCollection.doc(loged_id).collection('Requests').where("username", '==', "").get()
+	    .then(querySnapshot => {
+	      	querySnapshot.forEach(doc  => {
+	      		console.log(doc.id);
+	      		var result = usersCollection.doc(loged_id).collection('Requests').doc(doc.id).delete();
+	      	});
+      	}).catch(error => {
+			    console.error(error)
+			});
 	}
 	// console.log(from + " " + response);
-	res.redirect('signup');
+	res.redirect('home');
 })
 
 app.get('/Home', async (req, res) =>{

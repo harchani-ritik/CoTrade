@@ -163,6 +163,11 @@ td{
 ::-webkit-scrollbar-thumb:hover {
   background: #17203F; 
 }
+.details{
+  color: white;
+  background: none;
+  border: none;
+}
 
 /* table .tii{
 	color:black;
@@ -205,19 +210,23 @@ td{
 			<table>
 				<!-- <div class="tii" background-color="#17203F"> -->
 				<tr>
-					<td>Stock</td>
-					<td>Purchase price <br>(Rs.)</td>
-					<td>Shares</td>
-					<td>Time</td>
+					<td>Stock name</td>
+					<td>Current price <br>(Rs.)</td>
+					<td>Open price</td>
+					<td>Change</td>
 				</tr>
 			<!-- </div> -->
 				<% maping.forEach(function(value, key) { %>		
 						<form method="POST" action="/stock_card">
 							<tr>
+<<<<<<< HEAD
+								<th><button class="details" name="key" value="<%= key %>"><%= key %></button></th>
+=======
 								<th><button name="key" class="cname" value="<%= key %>"><%= key %></button></th>
+>>>>>>> a80cd04cf554f00357e51761474bed0c727405d6
 								<th><%= value.current_price %></th>
 								<th><%= value.open_price %></th>
-								<th><%= (value.current_price - value.open_price) / value.open_price %></th>
+								<th><%= (value.current_price - value.open_price)%></th>
 							</tr>
 						</form>
 				<% }) %>

@@ -111,8 +111,8 @@ footer {
 
 body #de{
 	color: white;
-	height:360px;
-	margin-top: 250px;
+	height:400px;
+	margin-top: 200px;
 	margin-left: 560px;
 	padding: 16px;
 	width:300px;
@@ -138,6 +138,10 @@ body #de{
 	/* background-image: url("/img/Group\ 55.svg"); */
 	/* width:10px; */
 	padding-left: 15px;
+}
+.price{
+	width: 0;
+	height: 0;
 }
 
 </style>
@@ -166,12 +170,29 @@ body #de{
 		<div><span style="color:green">Low Price : </span>$ <%= data.low_price %> </div>
 		<div><span style="color:green">Previous Price : </span>$ <%= data.previous_close %> </div>
 		<!-- <div><%= data.current_price	 - data.open_price %></div> -->
+<<<<<<< HEAD
+		<form method="POST" action="/buy">
+			<button class="buto" name="buy" value="<%= name %>">BUY</button>
+			<input class="price" type="text" name="price" value="<%= data.current_price %>"><br>
+			<input type="radio" name="public" value="true">
+			<label for="public">Public</label><br>
+			<input type="radio"name="public" value="false">
+			<label for="Private">Private</label><br>
+		</form>
+=======
 		<div><button class="buto">BUY</button></div><br>
+>>>>>>> a80cd04cf554f00357e51761474bed0c727405d6
 		<div class="graph">
 			<img src="Group 55.png " width="200px">
 		</div>
 	</div>
+<<<<<<< HEAD
+	<div>
+		
+	</div>
+=======
 
+>>>>>>> a80cd04cf554f00357e51761474bed0c727405d6
 
 </body>
 </html>
