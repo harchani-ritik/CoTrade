@@ -22,7 +22,7 @@ class _FeedPageState extends State<FeedPage> {
 
     final db = FirebaseFirestore.instance;
     List<String> usernames=[];
-    String docId = await ProfilqqePage.getDocId(Provider.of<Trader>(context,listen:false).username);
+    String docId = await ProfilePage.getDocId(Provider.of<Trader>(context,listen:false).username);
 
 
 
