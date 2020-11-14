@@ -5,12 +5,12 @@ Screenshots of Mobile Application
 
 Sign Up             |  Sign In
 :-------------------------:|:-------------------------:
-![](screenshot1.png)  |  ![](screenshot2.png)
+![](AppScreenshots/screenshot1.png)  |  ![](AppScreenshots/screenshot2.png)
 
 Stock Search            |  Trading Feed
 :-------------------------:|:-------------------------:
-![](screenshot3.png)  |  ![](screenshot4.png)
+![](AppScreenshots/screenshot3.png)  |  ![](AppScreenshots/screenshot4.png)
 
 Connection Search             |  Trader Profile
 :-------------------------:|:-------------------------:
-![](screenshot5.png)  |  ![](screenshot6.png)
+![](AppScreenshots/screenshot5.png)  |  ![](AppScreenshots/screenshot6.png)
