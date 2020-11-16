@@ -18,16 +18,20 @@ Connection Search             |  Trader Profile
 
 Screenshots of Web Application
 
+
 Sign Up             |  Sign In
 :-------------------------:|:-------------------------:
 ![](webscreenshots/signup.png)  |  ![](webscreenshots/login.png)
 
-Stock Search            |   Trader Profile
-:-------------------------:|:-------------------------:
-![](webscreenshots/Home.png)  |  ![](webscreenshots/feed.jpg)
+Stock Search            |  
+:-------------------------:|
+![](webscreenshots/home.png)  
 
-Stock card            | 
+Trader Profile
+:-------------------------:|
+![](webscreenshots/feed.jpg)
+
+Stock card            |   
 :-------------------------:| 
-![](webscreenshots/stock.png)
-
+![](webscreenshots/stock.png)   
 
