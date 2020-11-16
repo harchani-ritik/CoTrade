@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>signin</title>
+  <link rel="icon" type="image/png" sizes="56x56" href="./logo.png">
+
+	<title>Home</title>
 </head>
 <style>
 	body{
@@ -221,7 +223,7 @@ td{
 							<tr>
 								<th><button class="details" name="key" value="<%= key %>"><%= key %></button></th>
 
-								<th><button name="key" class="cname" value="<%= key %>"><%= key %></button></th>
+								<!-- <th><button name="key" class="cname" value="<%= key %>"><%= key %></button></th> -->
 								<th><%= value.current_price %></th>
 								<th><%= value.open_price %></th>
 								<th><%= (value.current_price - value.open_price)%></th>
